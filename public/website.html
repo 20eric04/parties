@@ -73,8 +73,10 @@ section{padding:100px 24px}
 .venue-card{border:1px solid var(--cream08);border-radius:16px;overflow:hidden;transition:all .4s}
 .venue-card:hover{border-color:var(--cream20);transform:translateY(-4px)}
 .venue-img{height:200px;position:relative;overflow:hidden}
+.venue-img img{width:100%;height:100%;object-fit:cover;display:block}
+.venue-img::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,7,7,.7) 0%,transparent 50%)}
 .venue-img .gradient-bg{position:absolute;inset:0}
-.venue-img .venue-badge{position:absolute;top:14px;left:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;background:rgba(7,7,7,.7);backdrop-filter:blur(8px);border-radius:100px;border:1px solid var(--cream08)}
+.venue-img .venue-badge{position:absolute;top:14px;left:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;background:rgba(7,7,7,.7);backdrop-filter:blur(8px);border-radius:100px;border:1px solid var(--cream08);z-index:2}
 .venue-info{padding:20px 22px 24px}
 .venue-info h3{font-family:var(--serif);font-size:18px;font-weight:500;margin-bottom:4px}
 .venue-info .venue-meta{font-size:12px;color:var(--cream50);margin-bottom:12px}
@@ -244,7 +246,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
     <div class="venues-grid">
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#1a0000 0%,#3d0000 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800&h=500&fit=crop&q=80" alt="LIV Miami nightclub" loading="lazy"/>
           <div class="venue-badge">Miami</div>
         </div>
         <div class="venue-info">
@@ -255,7 +257,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
       </div>
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#0a0a1a 0%,#1a0020 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1571204829887-3b8d69e4094d?w=800&h=500&fit=crop&q=80" alt="E11EVEN Miami" loading="lazy"/>
           <div class="venue-badge">Miami</div>
         </div>
         <div class="venue-info">
@@ -266,7 +268,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
       </div>
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#1a1a00 0%,#2d1a00 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=80" alt="Nammos Mykonos beach club" loading="lazy"/>
           <div class="venue-badge">Mykonos</div>
         </div>
         <div class="venue-info">
@@ -277,7 +279,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
       </div>
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#0a0a0a 0%,#1a0a00 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=500&fit=crop&q=80" alt="Carbone NYC restaurant" loading="lazy"/>
           <div class="venue-badge">New York</div>
         </div>
         <div class="venue-info">
@@ -288,7 +290,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
       </div>
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#0d0005 0%,#200010 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?w=800&h=500&fit=crop&q=80" alt="Story Miami nightclub" loading="lazy"/>
           <div class="venue-badge">Miami</div>
         </div>
         <div class="venue-info">
@@ -299,7 +301,7 @@ footer{border-top:1px solid var(--cream08);padding:60px 24px 40px}
       </div>
       <div class="venue-card r">
         <div class="venue-img">
-          <div class="gradient-bg" style="background:linear-gradient(135deg,#000d1a 0%,#001a2d 40%,#0a0a0a 100%)"></div>
+          <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&h=500&fit=crop&q=80" alt="Scorpios Mykonos" loading="lazy"/>
           <div class="venue-badge">Mykonos</div>
         </div>
         <div class="venue-info">
