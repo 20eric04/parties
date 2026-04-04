@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Parties App</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0A;--s1:#111;--s2:#1a1a1a;--s3:#222;--cream:#FAF8F5;--c2:rgba(250,248,245,.6);--c3:rgba(250,248,245,.3);--c4:rgba(250,248,245,.08);--g:#34D399;--serif:'Playfair Display',serif;--sans:'DM Sans',sans-serif}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);font-family:var(--sans)}
+
+.app{height:100%;display:flex;flex-direction:column}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+
+/* Tab bar */
+.tabs{display:flex;border-top:1px solid var(--c4);background:var(--bg);padding:8px 0 max(8px,env(safe-area-inset-bottom))}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;background:none;border:none;color:var(--c3);font-family:var(--sans);font-size:10px;cursor:pointer;transition:color .2s}
+.tab.on{color:var(--g)}
+.tab svg{width:20px;height:20px}
+
+/* Header */
+.hd{padding:56px 20px 16px;position:sticky;top:0;background:var(--bg);z-index:10}
+.hd h1{font-family:var(--serif);font-size:24px;font-weight:500}
+.hd-sub{font-size:12px;color:var(--c3);margin-top:2px}
+
+/* City pills */
+.cities{display:flex;gap:8px;padding:0 20px 12px;overflow-x:auto;scrollbar-width:none}
+.cities::-webkit-scrollbar{display:none}
+.cpill{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:500;border:1px solid var(--c4);background:transparent;color:var(--c2);cursor:pointer;white-space:nowrap;transition:all .2s;font-family:var(--sans)}
+.cpill.on{background:var(--g);color:var(--bg);border-color:var(--g)}
+
+/* Venue cards */
+.vlist{padding:8px 20px 100px;display:flex;flex-direction:column;gap:16px}
+.vc{border-radius:16px;overflow:hidden;border:1px solid var(--c4);cursor:pointer;transition:transform .2s}
+.vc:active{transform:scale(.98)}
+.vc-img{height:160px;position:relative;overflow:hidden}
+.vc-img img{width:100%;height:100%;object-fit:cover}
+.vc-img .vc-grad{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,10,10,.8) 0%,transparent 50%)}
+.vc-img .vc-tag{position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;background:rgba(10,10,10,.6);backdrop-filter:blur(6px);border-radius:100px;border:1px solid var(--c4)}
+.vc-body{padding:14px 16px}
+.vc-body h3{font-family:var(--serif);font-size:17px;font-weight:500;margin-bottom:2px}
+.vc-body .vc-meta{font-size:12px;color:var(--c3)}
+.vc-body .vc-price{font-size:12px;color:var(--c2);margin-top:8px}
+.vc-body .vc-price strong{color:var(--g);font-weight:600}
+
+/* Detail */
+.detail{position:fixed;inset:0;background:var(--bg);z-index:50;overflow-y:auto;scrollbar-width:none}
+.detail::-webkit-scrollbar{display:none}
+.d-hero{height:220px;position:relative}
+.d-hero img{width:100%;height:100%;object-fit:cover}
+.d-hero .d-grad{position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,transparent 50%)}
+.d-back{position:absolute;top:48px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(10,10,10,.6);backdrop-filter:blur(8px);border:1px solid var(--c4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--cream);z-index:5}
+.d-info{padding:0 20px 20px}
+.d-info h2{font-family:var(--serif);font-size:26px;font-weight:500;margin-bottom:4px}
+.d-info .d-sub{font-size:13px;color:var(--c3);margin-bottom:16px}
+.d-info .d-desc{font-size:14px;color:var(--c2);line-height:1.7;margin-bottom:24px}
+
+/* Table options */
+.t-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c3);margin-bottom:12px;padding:0 20px}
+.t-opts{padding:0 20px 24px;display:flex;flex-direction:column;gap:10px}
+.t-opt{border:1px solid var(--c4);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center}
+.t-opt.on{border-color:var(--g);background:rgba(52,211,153,.06)}
+.t-opt h4{font-size:14px;font-weight:500;margin-bottom:2px}
+.t-opt .t-cap{font-size:12px;color:var(--c3)}
+.t-opt .t-price{font-size:16px;font-weight:600;color:var(--g)}
+
+/* Book btn */
+.book-btn{margin:0 20px 40px;padding:16px;background:var(--g);color:var(--bg);font-family:var(--sans);font-size:15px;font-weight:600;border:none;border-radius:14px;cursor:pointer;text-align:center;transition:opacity .2s;width:calc(100% - 40px)}
+.book-btn:disabled{opacity:.3;cursor:default}
+
+/* Confirmation */
+.conf{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 32px}
+.conf-check{width:72px;height:72px;border-radius:50%;background:rgba(52,211,153,.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.conf h2{font-family:var(--serif);font-size:28px;font-weight:400;margin-bottom:8px}
+.conf .conf-code{font-size:14px;color:var(--g);font-weight:600;letter-spacing:.1em;margin-bottom:24px}
+.conf p{font-size:13px;color:var(--c3);line-height:1.7;max-width:280px}
+.conf-btn{margin-top:32px;padding:14px 40px;background:var(--c4);color:var(--cream);border:none;border-radius:100px;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer}
+
+/* Empty */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px}
+.empty h3{font-family:var(--serif);font-size:20px;font-weight:400;margin-bottom:8px}
+.empty p{font-size:13px;color:var(--c3);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+var CT=["Miami","New York","Mykonos"];
+var VN=[
+{n:"LIV",loc:"Fontainebleau, Miami Beach",city:0,type:"club",desc:"Miami's most iconic nightclub. A-list DJs, celebrity sightings, and the best bottle service in South Florida.",img:"https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&h=400&fit=crop&q=80",tables:[{n:"VIP Table",cap:"Up to 8",p:5000},{n:"Dance Floor VIP",cap:"Up to 6",p:3500},{n:"Owner's Table",cap:"Up to 15",p:15000}]},
+{n:"E11EVEN",loc:"Downtown, Miami",city:0,type:"club",desc:"24/7 ultraclub in Downtown Miami. Over-the-top performances, bottle service, and a crowd that never stops.",img:"https://images.unsplash.com/photo-1571204829887-3b8d69e4094d?w=600&h=400&fit=crop&q=80",tables:[{n:"Main Floor VIP",cap:"Up to 8",p:3000},{n:"Mezzanine",cap:"Up to 10",p:5000},{n:"Sky Deck",cap:"Up to 12",p:8000}]},
+{n:"Story",loc:"South Beach, Miami",city:0,type:"club",desc:"Where South Beach comes alive. Open-air energy, world-class production, and tables that feel like front row.",img:"https://images.unsplash.com/photo-1545128485-c400e7702796?w=600&h=400&fit=crop&q=80",tables:[{n:"Standard VIP",cap:"Up to 6",p:3500},{n:"Premium VIP",cap:"Up to 10",p:6000}]},
+{n:"Kiki on the River",loc:"Miami River",city:0,type:"dining",desc:"Waterfront Greek dining on the Miami River. Fresh seafood, white tablecloths, and sunset views.",img:"https://images.unsplash.com/photo-1544148103-0773bf10d330?w=600&h=400&fit=crop&q=80",tables:[{n:"Riverside Table",cap:"2-4",p:500},{n:"Private Dining",cap:"6-10",p:1500}]},
+{n:"Komodo",loc:"Brickell, Miami",city:0,type:"dining",desc:"Three-story Southeast Asian restaurant in the heart of Brickell. See-and-be-seen rooftop.",img:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop&q=80",tables:[{n:"Main Dining",cap:"2-4",p:400},{n:"Rooftop Table",cap:"4-8",p:1200}]},
+{n:"Carbone",loc:"Greenwich Village, NYC",city:1,type:"dining",desc:"Italian-American fine dining. Red leather booths, tableside Caesar salads, and a legendary veal parm.",img:"https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&h=400&fit=crop&q=80",tables:[{n:"Dining Room",cap:"2-4",p:800},{n:"Private Room",cap:"8-12",p:3000}]},
+{n:"Lavo NYC",loc:"Midtown, Manhattan",city:1,type:"club",desc:"Multi-level venue that transitions from upscale Italian dining to a full nightclub experience after dark.",img:"https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=600&h=400&fit=crop&q=80",tables:[{n:"Lounge VIP",cap:"Up to 6",p:2500},{n:"Main Room VIP",cap:"Up to 10",p:5000}]},
+{n:"Nammos",loc:"Psarou Beach, Mykonos",city:2,type:"club",desc:"The most legendary beach club in the Mediterranean. Crystal waters, live DJs, and the Mykonos elite.",img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop&q=80",tables:[{n:"Beach Daybed",cap:"Up to 4",p:5000},{n:"VIP Cabana",cap:"Up to 8",p:12000}]},
+{n:"Scorpios",loc:"Paraga, Mykonos",city:2,type:"club",desc:"Bohemian-luxe beach club on Paraga Bay. Sunset rituals, live music, and the best cocktails on the island.",img:"https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop&q=80",tables:[{n:"Sunset Lounge",cap:"Up to 6",p:3000},{n:"Clifftop Table",cap:"Up to 4",p:5000}]}
+];
+
+var S={tab:"explore",ci:0,vu:null,st:null,bk:false,cc:""};
+var el=document.getElementById("app");
+
+function R(){
+  var h='<div class="screen" id="scr">';
+  if(S.tab==="explore"){
+    h+='<div class="hd"><h1>Explore</h1><div class="hd-sub">'+CT[S.ci]+'</div></div>';
+    h+='<div class="cities">';
+    CT.forEach(function(c,i){h+='<button class="cpill'+(S.ci===i?' on':'')+'" onclick="sC('+i+')">'+c+'</button>';});
+    h+='</div>';
+    h+='<div class="vlist">';
+    VN.forEach(function(v,i){
+      if(v.city!==S.ci) return;
+      h+='<div class="vc" onclick="oV('+i+')"><div class="vc-img"><img src="'+v.img+'" alt="'+v.n+'" onerror="this.style.display=\'none\'"/><div class="vc-grad"></div><div class="vc-tag">'+(v.type==="club"?"Nightclub":"Dining")+'</div></div><div class="vc-body"><h3>'+v.n+'</h3><div class="vc-meta">'+v.loc+'</div><div class="vc-price">Starting from <strong>~$'+v.tables[0].p.toLocaleString()+'</strong></div></div></div>';
+    });
+    h+='</div>';
+  } else if(S.tab==="saved"){
+    h+='<div class="hd"><h1>Saved</h1></div><div class="empty"><h3>No saved venues yet</h3><p>Tap the heart on any venue to save it here.</p></div>';
+  } else if(S.tab==="bookings"){
+    h+='<div class="hd"><h1>Bookings</h1></div><div class="empty"><h3>No bookings yet</h3><p>Book a table to see your reservations here.</p></div>';
+  } else if(S.tab==="profile"){
+    h+='<div class="hd"><h1>Profile</h1></div>';
+    h+='<div style="padding:20px"><div style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid var(--c4);border-radius:16px;margin-bottom:20px"><div style="width:52px;height:52px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--bg)">E</div><div><div style="font-weight:600;font-size:15px">Eric</div><div style="font-size:12px;color:var(--c3)">Miami, FL</div></div></div>';
+    [["City","Miami"],["Email","eric@parties.app"],["Phone","+1 (786) •••-••••"]].forEach(function(r){
+      h+='<div style="display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--c4)"><span style="font-size:14px;color:var(--c3)">'+r[0]+'</span><span style="font-size:14px">'+r[1]+'</span></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+
+  // Tab bar
+  h+='<div class="tabs">';
+  [["explore","Explore",'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>'],
+   ["saved","Saved",'<path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>'],
+   ["bookings","Bookings",'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
+   ["profile","Profile",'<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>']
+  ].forEach(function(t){
+    h+='<button class="tab'+(S.tab===t[0]?' on':'')+'" onclick="nav(\''+t[0]+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">'+t[2]+'</svg>'+t[1]+'</button>';
+  });
+  h+='</div>';
+  el.innerHTML=h;
+}
+
+function sC(i){S.ci=i;R();}
+function nav(t){S.tab=t;S.vu=null;S.st=null;S.bk=false;R();}
+
+function oV(i){
+  S.vu=i;S.st=null;S.bk=false;
+  var v=VN[i];
+  var h='<div class="detail"><div class="d-hero"><img src="'+v.img+'" alt="'+v.n+'" onerror="this.style.display=\'none\'"/><div class="d-grad"></div><div class="d-back" onclick="bk()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div></div>';
+  h+='<div class="d-info"><h2>'+v.n+'</h2><div class="d-sub">'+v.loc+'</div><div class="d-desc">'+v.desc+'</div></div>';
+  h+='<div class="t-label">Select a Table</div><div class="t-opts" id="topts">';
+  v.tables.forEach(function(t,j){
+    h+='<div class="t-opt'+(S.st===j?' on':'')+'" onclick="sT('+j+')"><div><h4>'+t.n+'</h4><div class="t-cap">'+t.cap+' guests</div></div><div class="t-price">$'+t.p.toLocaleString()+'</div></div>';
+  });
+  h+='</div>';
+  h+='<button class="book-btn" id="bbtn" '+(S.st===null?'disabled':'')+' onclick="book()">Book Now</button>';
+  h+='</div>';
+  el.innerHTML=h;
+}
+
+function sT(j){
+  S.st=j;
+  document.querySelectorAll('.t-opt').forEach(function(o,k){o.classList.toggle('on',k===j);});
+  document.getElementById('bbtn').disabled=false;
+}
+
+function bk(){S.vu=null;S.st=null;R();}
+
+function book(){
+  S.cc="PTY-"+CT[S.ci].substring(0,3).toUpperCase()+"-"+Math.floor(1000+Math.random()*9000);
+  var v=VN[S.vu];var t=v.tables[S.st];
+  var h='<div class="detail"><div class="conf"><div class="conf-check"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><h2>You\'re booked.</h2><div class="conf-code">'+S.cc+'</div><p><strong>'+v.n+'</strong><br/>'+t.n+' · '+t.cap+' guests<br/>$'+t.p.toLocaleString()+' minimum</p><button class="conf-btn" onclick="rst()">Back to Explore</button></div></div>';
+  el.innerHTML=h;
+}
+
+function rst(){S.vu=null;S.st=null;S.bk=false;S.tab="explore";R();}
+R();
+</script>
+</body>
+</html>
